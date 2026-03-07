@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Application;
+use App\Models\OperatingSystem;
 use Illuminate\Database\Seeder;
 
 class ApplicationServerSeeder extends Seeder
@@ -15,6 +16,9 @@ class ApplicationServerSeeder extends Seeder
             'Mail Gateway' => 'Kurumsal e-posta ağ geçidi.',
         ];
 
+        $linux = OperatingSystem::updateOrCreate(['name' => 'Ubuntu 22.04'], ['is_active' => true]);
+        $windows = OperatingSystem::updateOrCreate(['name' => 'Windows Server 2022'], ['is_active' => true]);
+
         $environments = ['Test', 'Pre-Prod', 'Prod'];
 
         foreach ($apps as $name => $description) {
@@ -25,7 +29,7 @@ class ApplicationServerSeeder extends Seeder
                     ['name' => strtolower($name) . '-' . strtolower(str_replace('-', '', $environment)) . '-srv'],
                     [
                         'ip_address' => '10.0.' . ($application->id + 10) . '.' . ($index + 10),
-                        'operating_system' => $index % 2 === 0 ? 'Ubuntu 22.04' : 'Windows Server 2022',
+                        'operating_system_id' => $index % 2 === 0 ? $linux->id : $windows->id,
                         'environment_type' => $environment,
                         'notes' => $name . ' için ' . $environment . ' ortamı.',
                     ]

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\ServerRequest;
 use App\Models\Application;
+use App\Models\OperatingSystem;
 use App\Models\Server;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -17,8 +18,14 @@ class ServerController extends Controller
         $environment = $request->string('environment');
 
         $servers = Server::query()
-            ->with('application')
-            ->when($search, fn ($q) => $q->where('name', 'like', "%{$search}%"))
+            ->with(['application', 'operatingSystem'])
+            ->when($search, function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                    ->orWhere('ip_address', 'like', "%{$search}%")
+                    ->orWhere('notes', 'like', "%{$search}%")
+                    ->orWhereHas('application', fn ($applicationQuery) => $applicationQuery->where('name', 'like', "%{$search}%"))
+                    ->orWhereHas('operatingSystem', fn ($osQuery) => $osQuery->where('name', 'like', "%{$search}%"));
+            })
             ->when($environment, fn ($q) => $q->where('environment_type', $environment))
             ->latest()
             ->paginate(12)
@@ -36,6 +43,7 @@ class ServerController extends Controller
     {
         return view('servers.create', [
             'applications' => Application::orderBy('name')->get(),
+            'operatingSystems' => OperatingSystem::query()->where('is_active', true)->orderBy('name')->get(),
             'environments' => Server::ENVIRONMENTS,
         ]);
     }
@@ -49,9 +57,16 @@ class ServerController extends Controller
 
     public function edit(Server $server): View
     {
+        $operatingSystems = OperatingSystem::query()
+            ->where('is_active', true)
+            ->orWhere('id', $server->operating_system_id)
+            ->orderBy('name')
+            ->get();
+
         return view('servers.edit', [
-            'server' => $server,
+            'server' => $server->load(['application', 'operatingSystem']),
             'applications' => Application::orderBy('name')->get(),
+            'operatingSystems' => $operatingSystems,
             'environments' => Server::ENVIRONMENTS,
         ]);
     }

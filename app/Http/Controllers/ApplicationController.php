@@ -39,6 +39,7 @@ class ApplicationController extends Controller
     public function show(Application $application): View
     {
         $groupedServers = $application->servers()
+            ->with('operatingSystem')
             ->orderBy('name')
             ->get()
             ->groupBy('environment_type');

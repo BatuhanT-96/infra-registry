@@ -3,6 +3,7 @@
 use App\Http\Controllers\ApplicationController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\OperatingSystemController;
 use App\Http\Controllers\ServerController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
@@ -22,6 +23,7 @@ Route::middleware('auth')->group(function () {
     Route::resource('servers', ServerController::class)->except(['show']);
 
     Route::middleware('role:Admin')->group(function () {
+        Route::resource('operating-systems', OperatingSystemController::class)->except(['show']);
         Route::resource('users', UserController::class)->except(['show']);
     });
 });

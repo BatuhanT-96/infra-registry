@@ -12,7 +12,7 @@
                 @forelse(($groupedServers[$environment] ?? collect()) as $server)
                     <div class="border rounded p-2 mb-2">
                         <div class="fw-bold">{{ $server->name }}</div>
-                        <small>{{ $server->ip_address }} | {{ $server->operating_system }}</small>
+                        <small>{{ $server->ip_address }} | {{ $server->operatingSystem->name }}</small>
                         <div>{{ $server->notes }}</div>
                     </div>
                 @empty
