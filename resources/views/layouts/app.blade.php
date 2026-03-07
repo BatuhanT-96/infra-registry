@@ -4,15 +4,19 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <title>Envanter Yönetimi</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        body { background-color: #f5f7fb; }
+        body { background-color: #f5f7fb; font-family: "Inter", "Segoe UI", Roboto, sans-serif; color: #0f172a; }
         .sidebar { min-height: 100vh; background: #0f172a; }
         .sidebar a { color: #cbd5e1; }
         .sidebar a.active, .sidebar a:hover { color: #fff; background: #1e293b; border-radius: .5rem; }
         .card-stat { border: none; box-shadow: 0 0.5rem 1.2rem rgba(15, 23, 42, .06); }
     </style>
+    @stack('styles')
 </head>
 <body>
 <div class="container-fluid">
