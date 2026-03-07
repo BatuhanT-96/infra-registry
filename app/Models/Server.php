@@ -16,13 +16,22 @@ class Server extends Model
         'application_id',
         'name',
         'ip_address',
-        'operating_system',
+        'operating_system_id',
         'environment_type',
         'notes',
     ];
 
     public function application(): BelongsTo
     {
-        return $this->belongsTo(Application::class);
+        return $this->belongsTo(Application::class)->withDefault([
+            'name' => '-',
+        ]);
+    }
+
+    public function operatingSystem(): BelongsTo
+    {
+        return $this->belongsTo(OperatingSystem::class)->withDefault([
+            'name' => '-',
+        ]);
     }
 }

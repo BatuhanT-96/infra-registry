@@ -8,7 +8,7 @@
     @endif
 </div>
 <form class="row g-2 mb-3" method="GET">
-    <div class="col-md-4"><input class="form-control" name="q" value="{{ $search }}" placeholder="Sunucu adına göre ara"></div>
+    <div class="col-md-4"><input class="form-control" name="q" value="{{ $search }}" placeholder="Sunucu, uygulama, OS, IP veya nota göre ara"></div>
     <div class="col-md-3">
         <select name="environment" class="form-select">
             <option value="">Tüm Ortamlar</option>
@@ -19,12 +19,16 @@
 </form>
 <div class="card">
 <table class="table mb-0">
-    <thead><tr><th>Sunucu</th><th>Uygulama</th><th>IP</th><th>OS</th><th>Ortam</th><th>Not</th><th>İşlem</th></tr></thead>
+    <thead><tr><th>Server Name</th><th>Application</th><th>IP Address</th><th>Operating System</th><th>Environment</th><th>Notes</th><th>Actions</th></tr></thead>
     <tbody>
     @forelse($servers as $server)
         <tr>
-            <td>{{ $server->name }}</td><td>{{ $server->application->name }}</td><td>{{ $server->ip_address }}</td>
-            <td>{{ $server->operating_system }}</td><td>{{ $server->environment_type }}</td><td>{{ $server->notes }}</td>
+            <td>{{ $server->name }}</td>
+            <td>{{ $server->application->name }}</td>
+            <td>{{ $server->ip_address }}</td>
+            <td>{{ $server->operatingSystem->name }}</td>
+            <td>{{ $server->environment_type }}</td>
+            <td>{{ $server->notes }}</td>
             <td>
             @if(auth()->user()->isAdmin())
                 <a class="btn btn-sm btn-warning" href="{{ route('servers.edit', $server) }}">Düzenle</a>

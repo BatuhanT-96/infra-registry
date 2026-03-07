@@ -24,6 +24,7 @@
                 <a class="nav-link {{ request()->routeIs('applications.*') ? 'active' : '' }}" href="{{ route('applications.index') }}">Uygulamalar</a>
                 <a class="nav-link {{ request()->routeIs('servers.*') ? 'active' : '' }}" href="{{ route('servers.index') }}">Sunucular</a>
                 @if(auth()->user()?->isAdmin())
+                    <a class="nav-link {{ request()->routeIs('operating-systems.*') ? 'active' : '' }}" href="{{ route('operating-systems.index') }}">İşletim Sistemleri</a>
                     <a class="nav-link {{ request()->routeIs('users.*') ? 'active' : '' }}" href="{{ route('users.index') }}">Kullanıcı Yönetimi</a>
                 @endif
             </nav>
