@@ -14,20 +14,47 @@ class ServerController extends Controller
 {
     public function index(Request $request): View
     {
-        $search = $request->string('q');
-        $environment = $request->string('environment');
+        $search = trim((string) $request->input('q', ''));
+        $environment = $request->input('environment');
+        $applicationId = $request->input('application_id');
+
+        $sortableColumns = [
+            'name' => 'servers.name',
+            'application' => 'applications.name',
+            'ip_address' => 'servers.ip_address',
+            'operating_system' => 'operating_systems.name',
+            'environment' => 'servers.environment_type',
+        ];
+
+        $sort = $request->input('sort', 'name');
+        $direction = strtolower((string) $request->input('direction', 'asc'));
+
+        if (! isset($sortableColumns[$sort])) {
+            $sort = 'name';
+        }
+
+        if (! in_array($direction, ['asc', 'desc'], true)) {
+            $direction = 'asc';
+        }
 
         $servers = Server::query()
+            ->select('servers.*')
+            ->leftJoin('applications', 'applications.id', '=', 'servers.application_id')
+            ->leftJoin('operating_systems', 'operating_systems.id', '=', 'servers.operating_system_id')
             ->with(['application', 'operatingSystem'])
-            ->when($search, function ($q) use ($search) {
-                $q->where('name', 'like', "%{$search}%")
-                    ->orWhere('ip_address', 'like', "%{$search}%")
-                    ->orWhere('notes', 'like', "%{$search}%")
+            ->when($search !== '', function ($q) use ($search) {
+                $q->where(function ($searchQuery) use ($search) {
+                    $searchQuery->where('servers.name', 'like', "%{$search}%")
+                        ->orWhere('servers.ip_address', 'like', "%{$search}%")
+                        ->orWhere('servers.notes', 'like', "%{$search}%")
                     ->orWhereHas('application', fn ($applicationQuery) => $applicationQuery->where('name', 'like', "%{$search}%"))
                     ->orWhereHas('operatingSystem', fn ($osQuery) => $osQuery->where('name', 'like', "%{$search}%"));
+                });
             })
-            ->when($environment, fn ($q) => $q->where('environment_type', $environment))
-            ->latest()
+            ->when($applicationId, fn ($q) => $q->where('servers.application_id', $applicationId))
+            ->when($environment, fn ($q) => $q->where('servers.environment_type', $environment))
+            ->orderBy($sortableColumns[$sort], $direction)
+            ->orderBy('servers.id')
             ->paginate(12)
             ->withQueryString();
 
@@ -35,7 +62,11 @@ class ServerController extends Controller
             'servers' => $servers,
             'search' => $search,
             'environment' => $environment,
+            'applicationId' => $applicationId,
+            'applications' => Application::query()->orderBy('name')->get(['id', 'name']),
             'environments' => Server::ENVIRONMENTS,
+            'sort' => $sort,
+            'direction' => $direction,
         ]);
     }
 
