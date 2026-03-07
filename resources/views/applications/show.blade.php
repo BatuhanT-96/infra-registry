@@ -34,8 +34,16 @@
         line-height: 1.7;
     }
 
+    .environment-grid {
+        column-count: 3;
+        column-gap: 1rem;
+    }
+
     .environment-block {
-        height: 100%;
+        break-inside: avoid;
+        display: inline-block;
+        width: 100%;
+        margin-bottom: 1rem;
         padding: 1.2rem;
         box-shadow: 0 8px 20px rgba(15, 23, 42, 0.05);
     }
@@ -110,6 +118,12 @@
         margin: 0;
     }
 
+    @media (max-width: 1199.98px) {
+        .environment-grid {
+            column-count: 2;
+        }
+    }
+
     @media (max-width: 991.98px) {
         .app-detail-hero {
             padding: 1.5rem;
@@ -117,6 +131,12 @@
 
         .environment-block {
             padding: 1rem;
+        }
+    }
+
+    @media (max-width: 767.98px) {
+        .environment-grid {
+            column-count: 1;
         }
     }
 
@@ -147,13 +167,12 @@
         </div>
     </section>
 
-    <section class="row g-4">
+    <section class="environment-grid">
         @foreach($environments as $environment)
             @php
                 $servers = $groupedServers[$environment] ?? collect();
             @endphp
-            <div class="col-12 col-md-6 col-xxl-4">
-                <article class="environment-block">
+            <article class="environment-block">
                     <header class="environment-header d-flex justify-content-between align-items-center gap-2">
                         <h2 class="environment-label">{{ $environment }}</h2>
                         <span class="environment-count">{{ $servers->count() }} sunucu</span>
@@ -175,8 +194,7 @@
                     @else
                         <p class="empty-state">Bu ortam için sunucu eklenmemiş.</p>
                     @endif
-                </article>
-            </div>
+            </article>
         @endforeach
     </section>
 </div>
