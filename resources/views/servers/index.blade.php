@@ -1,0 +1,42 @@
+@extends('layouts.app')
+
+@section('content')
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2>Sunucular</h2>
+    @if(auth()->user()->isAdmin())
+        <a class="btn btn-primary" href="{{ route('servers.create') }}">Yeni Sunucu</a>
+    @endif
+</div>
+<form class="row g-2 mb-3" method="GET">
+    <div class="col-md-4"><input class="form-control" name="q" value="{{ $search }}" placeholder="Sunucu adına göre ara"></div>
+    <div class="col-md-3">
+        <select name="environment" class="form-select">
+            <option value="">Tüm Ortamlar</option>
+            @foreach($environments as $env)<option value="{{ $env }}" @selected($environment===$env)>{{ $env }}</option>@endforeach
+        </select>
+    </div>
+    <div class="col-md-2"><button class="btn btn-outline-secondary">Filtrele</button></div>
+</form>
+<div class="card">
+<table class="table mb-0">
+    <thead><tr><th>Sunucu</th><th>Uygulama</th><th>IP</th><th>OS</th><th>Ortam</th><th>Not</th><th>İşlem</th></tr></thead>
+    <tbody>
+    @forelse($servers as $server)
+        <tr>
+            <td>{{ $server->name }}</td><td>{{ $server->application->name }}</td><td>{{ $server->ip_address }}</td>
+            <td>{{ $server->operating_system }}</td><td>{{ $server->environment_type }}</td><td>{{ $server->notes }}</td>
+            <td>
+            @if(auth()->user()->isAdmin())
+                <a class="btn btn-sm btn-warning" href="{{ route('servers.edit', $server) }}">Düzenle</a>
+                <form method="POST" action="{{ route('servers.destroy', $server) }}" class="d-inline" onsubmit="return confirm('Silmek istediğinize emin misiniz?')">@csrf @method('DELETE')<button class="btn btn-sm btn-danger">Sil</button></form>
+            @endif
+            </td>
+        </tr>
+    @empty
+        <tr><td colspan="7" class="text-center">Kayıt yok.</td></tr>
+    @endforelse
+    </tbody>
+</table>
+</div>
+<div class="mt-3">{{ $servers->links() }}</div>
+@endsection
