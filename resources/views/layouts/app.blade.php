@@ -7,7 +7,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
-    <title>Envanter Yönetimi</title>
+    <title>Uygulama Envanter Yönetimi</title>
     <style>
         /* ─── Reset & Base ───────────────────────────── */
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -404,7 +404,7 @@
     <a class="sidebar-brand" href="{{ route('dashboard') }}">
         <img src="{{ asset('images/logo.png') }}" alt="Logo" style="width:100%; height:auto; object-fit:contain; display:block;">
         <div class="sidebar-brand-text">
-            <span class="sidebar-brand-name">Envanter</span>
+            <span class="sidebar-brand-name">Uygulama Envanter</span>
             <span class="sidebar-brand-sub">Yönetim Paneli</span>
         </div>
     </a>
