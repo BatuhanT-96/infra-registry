@@ -184,14 +184,6 @@ The dashboard provides infrastructure-level visibility with:
 - **Operating system distribution pie/doughnut chart**
   - Shows server distribution by OS
 
-## Screenshots
-Add screenshots here as the project evolves:
-
-- `docs/screenshots/dashboard.png` — Dashboard
-- `docs/screenshots/server-list.png` — Server List
-- `docs/screenshots/application-detail.png` — Application Detail
-- `docs/screenshots/operating-systems.png` — Operating System Management
-
 ## Security Notes
 - Authentication is based on **username/password** with Laravel session auth.
 - Authorization is enforced via **role-based access control** (Admin/User).
@@ -200,11 +192,7 @@ Add screenshots here as the project evolves:
 
 ## Future Improvements
 Possible enhancements:
-- REST API support for external integrations
 - Audit logging for CRUD and authentication events
 - Email or in-app notifications
-- Infrastructure integrations (CMDB/cloud sync)
 - Advanced reporting and export options
 
-## License
-This project is open-source and available under the **MIT License**.
